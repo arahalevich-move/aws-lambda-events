@@ -1,8 +1,8 @@
 use custom_serde::*;
-use std::collections::HashMap;
 use serde::de::DeserializeOwned;
 use serde::ser::Serialize;
 use serde_json::Value;
+use std::collections::HashMap;
 
 /// `ApiGatewayProxyRequest` contains data coming from the API Gateway proxy
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
@@ -73,9 +73,10 @@ pub struct ApiGatewayProxyResponse {
 /// `ApiGatewayProxyRequestContext` contains the information to identify the AWS account and resources invoking the
 /// Lambda function. It also includes Cognito identity information for the caller.
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
-pub struct ApiGatewayProxyRequestContext<T1=Value>
-where T1: DeserializeOwned,
-      T1: Serialize,
+pub struct ApiGatewayProxyRequestContext<T1 = Value>
+where
+    T1: DeserializeOwned,
+    T1: Serialize,
 {
     #[serde(deserialize_with = "deserialize_lambda_string")]
     #[serde(default)]
@@ -99,7 +100,7 @@ where T1: DeserializeOwned,
     pub resource_path: Option<String>,
     #[serde(deserialize_with = "deserialize_lambda_map")]
     #[serde(default)]
-    #[serde(bound="")]
+    #[serde(bound = "")]
     pub authorizer: HashMap<String, T1>,
     #[serde(deserialize_with = "deserialize_lambda_string")]
     #[serde(default)]
@@ -293,9 +294,10 @@ pub struct ApiGatewayCustomAuthorizerRequestTypeRequest {
 
 /// `ApiGatewayCustomAuthorizerResponse` represents the expected format of an API Gateway authorization response.
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
-pub struct ApiGatewayCustomAuthorizerResponse<T1=Value>
-where T1: DeserializeOwned,
-      T1: Serialize,
+pub struct ApiGatewayCustomAuthorizerResponse<T1 = Value>
+where
+    T1: DeserializeOwned,
+    T1: Serialize,
 {
     #[serde(deserialize_with = "deserialize_lambda_string")]
     #[serde(default)]
@@ -305,7 +307,7 @@ where T1: DeserializeOwned,
     pub policy_document: ApiGatewayCustomAuthorizerPolicy,
     #[serde(deserialize_with = "deserialize_lambda_map")]
     #[serde(default)]
-    #[serde(bound="")]
+    #[serde(bound = "")]
     pub context: HashMap<String, T1>,
     #[serde(rename = "usageIdentifierKey")]
     pub usage_identifier_key: Option<String>,
@@ -316,15 +318,20 @@ where T1: DeserializeOwned,
 pub struct ApiGatewayCustomAuthorizerPolicy {
     #[serde(deserialize_with = "deserialize_lambda_string")]
     #[serde(default)]
+    #[serde(rename = "Version")]
     pub version: Option<String>,
+    #[serde(rename = "Statement")]
     pub statement: Vec<IamPolicyStatement>,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 pub struct IamPolicyStatement {
+    #[serde(rename = "Action")]
     pub action: Vec<String>,
     #[serde(deserialize_with = "deserialize_lambda_string")]
     #[serde(default)]
+    #[serde(rename = "Effect")]
     pub effect: Option<String>,
+    #[serde(rename = "Resource")]
     pub resource: Vec<String>,
 }
